@@ -1,0 +1,11 @@
+services:
+  nextjs-docker-upload:
+    build:
+      context: .
+    ports:
+      - "3020:3000"
+    volumes:
+      - uploads:/app/uploads
+
+volumes:
+  uploads:
