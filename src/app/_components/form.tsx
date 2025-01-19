@@ -1,41 +1,40 @@
+"use client";
 import { upload } from "@/app/actions";
-import { ALLOWED_TYPES, formatFileSize, MAX_FILE_SIZE } from "@/app/utils";
+import { ALLOWED_TYPES, MAX_FILE_SIZE } from "@/app/constants";
+import { formatFileSize } from "@/app/utils";
+import { useState } from "react";
 
 const Form = () => {
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
   const handleUpload = async (formData: FormData) => {
-    "use server";
-    await upload(formData);
+    const result = await upload(formData);
+    if (!result.success) {
+      setErrorMessage(result.message);
+    } else {
+      setErrorMessage(null);
+    }
   };
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-sm mb-8">
-      <h2 className="text-xl font-semibold mb-4">Upload New File</h2>
+    <div className="p-6 rounded-lg bg-[#282a36] mb-8 border border-[#44475a]">
       <form action={handleUpload}>
         <div className="space-y-4">
-          <div className="border-2 border-dashed border-gray-300 rounded-lg p-6">
+          <div className="border-2 border-dashed border-[#44475a] rounded-lg p-6 bg-[#1e1f29]">
             <input
               name="file"
               type="file"
               accept={Object.keys(ALLOWED_TYPES).join(",")}
-              className="block w-full text-sm text-slate-500
-                  file:mr-4 file:py-2 file:px-4
-                  file:rounded-full file:border-0
-                  file:text-sm file:font-semibold
-                  file:bg-violet-50 file:text-violet-700
-                  hover:file:bg-violet-100
-                  cursor-pointer"
+              className="text-[#f8f8f2] file:p-2 file:rounded-lg file:border-0 file:bg-[#bd93f9] hover:file:bg-[#ff79c6]"
             />
-            <p className="mt-2 text-sm text-gray-500">
+            <p className="mt-2 text-[#6272a4]">
               Max file size: {formatFileSize(MAX_FILE_SIZE)}
             </p>
-            <p className="text-sm text-gray-500">
-              Allowed types: {Object.keys(ALLOWED_TYPES).join(", ")}
-            </p>
           </div>
+          {errorMessage && <p className="text-[#ff5555]">{errorMessage}</p>}
           <button
             type="submit"
-            className="w-full px-4 py-2 bg-violet-600 text-white rounded-lg
-                hover:bg-violet-700 transition-colors"
+            className="w-full p-2 bg-[#bd93f9] rounded-lg hover:bg-[#ff79c6]"
           >
             Upload File
           </button>

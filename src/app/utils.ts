@@ -1,36 +1,45 @@
+import { ALLOWED_TYPES } from "@/app/constants";
 import path from "path";
 
-const ALLOWED_TYPES = {
-  "image/jpeg": [".jpg", ".jpeg"],
-  "image/png": [".png"],
-  "image/gif": [".gif"],
-  "image/webp": [".webp"],
-  "image/svg+xml": [".svg"],
-
-  "application/pdf": [".pdf"],
-  "application/msword": [".doc"],
-  "application/vnd.openxmlformats-officedocument.wordprocessingml.document": [
-    ".docx",
-  ],
-  "application/vnd.ms-excel": [".xls"],
-  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": [
-    ".xlsx",
-  ],
-  "text/plain": [".txt"],
-  "text/csv": [".csv"],
-
-  "application/zip": [".zip"],
-  "application/x-rar-compressed": [".rar"],
-
-  "audio/mpeg": [".mp3"],
-  "audio/wav": [".wav"],
-
-  "video/mp4": [".mp4"],
-  "video/webm": [".webm"],
+const sanitizeFileName = (fileName: string): string => {
+  const name = path.basename(fileName);
+  return name
+    .toLowerCase()
+    .replace(/[^a-z0-9.-]/g, "_")
+    .replace(/_+/g, "_");
 };
 
-const getFileExtension = (fileName: string): string => {
-  return path.extname(fileName).toLowerCase();
+const isAllowedMimeType = (
+  type: string
+): type is keyof typeof ALLOWED_TYPES => {
+  return type in ALLOWED_TYPES;
+};
+
+const canShowInBrowser = (fileExt: string): boolean => {
+  const browserViewableTypes = [
+    ".png",
+    ".jpg",
+    ".jpeg",
+    ".gif",
+    ".webp",
+    ".svg",
+    ".pdf",
+    ".txt",
+    ".mp3",
+    ".wav",
+    ".mp4",
+    ".webm",
+  ];
+  return browserViewableTypes.includes(fileExt.toLowerCase());
+};
+
+const getMimeTypeFromExtension = (fileExt: string): string | null => {
+  for (const [mimeType, extensions] of Object.entries(ALLOWED_TYPES)) {
+    if (extensions.includes(fileExt.toLowerCase())) {
+      return mimeType;
+    }
+  }
+  return null;
 };
 
 const formatFileSize = (bytes: number): string => {
@@ -40,15 +49,6 @@ const formatFileSize = (bytes: number): string => {
   return Math.round((bytes / Math.pow(1024, i)) * 100) / 100 + " " + sizes[i];
 };
 
-const sanitizeFileName = (fileName: string): string => {
-  const name = path.basename(fileName);
-
-  return name
-    .toLowerCase()
-    .replace(/[^a-z0-9.-]/g, "_")
-    .replace(/_+/g, "_");
-};
-
 const getFileType = (extension: string): string => {
   const typeMap: Record<string, string> = {
     ".jpg": "image",
@@ -56,13 +56,19 @@ const getFileType = (extension: string): string => {
     ".png": "image",
     ".gif": "image",
     ".webp": "image",
+    ".svg": "image",
+
     ".pdf": "document",
     ".doc": "document",
     ".docx": "document",
     ".xls": "document",
     ".xlsx": "document",
+    ".txt": "document",
+    ".csv": "document",
+
     ".mp3": "audio",
     ".wav": "audio",
+
     ".mp4": "video",
     ".webm": "video",
   };
@@ -79,17 +85,11 @@ const groupFilesByType = (files: string[]) => {
   }, {} as Record<string, string[]>);
 };
 
-const MAX_FILE_SIZE = 100 * 1024 * 1024;
-
-const UPLOAD_DIR = "uploads";
-
 export {
-  getFileExtension,
   formatFileSize,
   sanitizeFileName,
-  getFileType,
   groupFilesByType,
-  ALLOWED_TYPES,
-  MAX_FILE_SIZE,
-  UPLOAD_DIR,
+  isAllowedMimeType,
+  getMimeTypeFromExtension,
+  canShowInBrowser,
 };

@@ -1,9 +1,7 @@
-import {
-  ALLOWED_TYPES,
-  MAX_FILE_SIZE,
-  sanitizeFileName,
-  UPLOAD_DIR,
-} from "@/app/utils";
+"use server";
+
+import { ALLOWED_TYPES, MAX_FILE_SIZE, UPLOAD_DIR } from "@/app/constants";
+import { isAllowedMimeType, sanitizeFileName } from "@/app/utils";
 import fs from "fs/promises";
 import { revalidatePath } from "next/cache";
 import path from "path";
@@ -22,7 +20,7 @@ const upload = async (formData: FormData): Promise<UploadResult> => {
       return { success: false, message: "No file uploaded" };
     }
 
-    if (!Object.keys(ALLOWED_TYPES).includes(file.type)) {
+    if (!isAllowedMimeType(file.type)) {
       return {
         success: false,
         message: `File type not allowed. Allowed types: ${Object.keys(
@@ -42,6 +40,7 @@ const upload = async (formData: FormData): Promise<UploadResult> => {
 
     const originalExtension = path.extname(file.name).toLowerCase();
     const allowedExtensions = ALLOWED_TYPES[file.type];
+
     if (!allowedExtensions.includes(originalExtension)) {
       return {
         success: false,
@@ -76,7 +75,6 @@ const upload = async (formData: FormData): Promise<UploadResult> => {
       fileName: safeFileName,
     };
   } catch (error) {
-    console.error("Upload error:", error);
     return {
       success: false,
       message:
