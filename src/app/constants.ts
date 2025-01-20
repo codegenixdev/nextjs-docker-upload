@@ -1,10 +1,12 @@
 const ALLOWED_TYPES = {
+  // image
   "image/jpeg": [".jpg", ".jpeg"],
   "image/png": [".png"],
   "image/gif": [".gif"],
   "image/webp": [".webp"],
   "image/svg+xml": [".svg"],
 
+  // document
   "application/pdf": [".pdf"],
   "application/msword": [".doc"],
   "application/vnd.openxmlformats-officedocument.wordprocessingml.document": [
@@ -17,14 +19,17 @@ const ALLOWED_TYPES = {
   "text/plain": [".txt"],
   "text/csv": [".csv"],
 
+  // compressed
   "application/zip": [".zip"],
   "application/x-rar-compressed": [".rar"],
   "application/x-zip-compressed": [".zip"],
   "application/octet-stream": [".zip"],
 
+  // audio
   "audio/mpeg": [".mp3"],
   "audio/wav": [".wav"],
 
+  // video
   "video/mp4": [".mp4"],
   "video/webm": [".webm"],
 };

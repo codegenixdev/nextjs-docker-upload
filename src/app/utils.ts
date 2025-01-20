@@ -77,8 +77,8 @@ const getFileType = (extension: string): string => {
 
 const groupFilesByType = (files: string[]) => {
   return files.reduce((acc, file) => {
-    const ext = path.extname(file).toLowerCase();
-    const type = getFileType(ext);
+    const extension = path.extname(file).toLowerCase();
+    const type = getFileType(extension);
     if (!acc[type]) acc[type] = [];
     acc[type].push(file);
     return acc;

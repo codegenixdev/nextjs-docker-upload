@@ -1,19 +1,10 @@
 "use client";
-import { upload } from "@/app/actions";
 import { ALLOWED_TYPES, MAX_FILE_SIZE } from "@/app/constants";
 import { formatFileSize } from "@/app/utils";
-import { useState } from "react";
 
 const Form = () => {
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-
   const handleUpload = async (formData: FormData) => {
-    const result = await upload(formData);
-    if (!result.success) {
-      setErrorMessage(result.message);
-    } else {
-      setErrorMessage(null);
-    }
+    // TODO
   };
 
   return (
@@ -31,7 +22,6 @@ const Form = () => {
               Max file size: {formatFileSize(MAX_FILE_SIZE)}
             </p>
           </div>
-          {errorMessage && <p className="text-[#ff5555]">{errorMessage}</p>}
           <button
             type="submit"
             className="w-full p-2 bg-[#bd93f9] rounded-lg hover:bg-[#ff79c6]"

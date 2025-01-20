@@ -1,22 +1,14 @@
-import { deleteFile } from "@/app/actions";
 import { groupFilesByType } from "@/app/utils";
-import fs from "fs/promises";
 import Image from "next/image";
 
 const List = async () => {
   let files: string[] = [];
 
-  try {
-    files = await fs.readdir("uploads");
-  } catch (error) {
-    await fs.mkdir("uploads", { recursive: true });
-  }
-
   const groupedFiles = groupFilesByType(files);
 
   const handleDelete = async (fileName: string) => {
     "use server";
-    await deleteFile(fileName);
+    // TODO
   };
 
   return (
