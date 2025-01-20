@@ -9,6 +9,7 @@ const List = async () => {
   try {
     files = await fs.readdir("uploads");
   } catch (error) {
+    console.error(error);
     await fs.mkdir("uploads", { recursive: true });
   }
 

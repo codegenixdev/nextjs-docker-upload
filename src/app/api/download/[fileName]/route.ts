@@ -29,6 +29,7 @@ const GET = async (_: NextRequest, { params }: { params: Params }) => {
     try {
       await fs.access(filePath);
     } catch (error) {
+      console.error(error);
       return NextResponse.json({ error: "File not found" }, { status: 404 });
     }
 

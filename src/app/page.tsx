@@ -1,6 +1,8 @@
 import { Form } from "@/app/_components/form";
 import { List } from "@/app/_components/list";
 
+const dynamic = "force-dynamic";
+
 const Page = async () => {
   return (
     <div className="min-h-screen bg-[#1a1b26]">
@@ -12,4 +14,5 @@ const Page = async () => {
   );
 };
 
+export { dynamic };
 export default Page;
